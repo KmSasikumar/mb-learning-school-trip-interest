@@ -127,6 +127,7 @@ h2 {
 /* Trip cards */
 
 .grid {
+  align-items: start;
   display: grid;
   gap: 16px;
   grid-template-columns: 1fr;
@@ -140,6 +141,7 @@ h2 {
 }
 
 .card {
+  align-self: start;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -149,11 +151,21 @@ h2 {
 
 .card-visual {
   align-items: center;
+  box-sizing: border-box;
   color: #fff;
   display: flex;
-  font-size: 40px;
-  height: 110px;
+  flex-shrink: 0;
   justify-content: center;
+  line-height: 1;
+  min-height: 120px;
+  overflow: hidden;
+  padding: 28px 12px;
+}
+
+.card-icon {
+  display: block;
+  font-size: 44px;
+  line-height: 1;
 }
 
 .card-singapore .card-visual {

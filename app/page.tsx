@@ -49,7 +49,9 @@ export default function HomePage() {
               key={trip.id}
             >
               <div className="card-visual" aria-hidden="true">
-                {TRIP_ICONS[trip.id] ?? "✈️"}
+                <span className="card-icon">
+                  {TRIP_ICONS[trip.id] ?? "✈️"}
+                </span>
               </div>
               <div className="card-body">
                 <h2>{trip.title}</h2>
