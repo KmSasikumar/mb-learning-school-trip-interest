@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { submitInterest } from "./actions";
 import { TRIPS } from "@/lib/trips";
@@ -27,6 +28,7 @@ function SubmitButton() {
 
 export default function HomePage() {
   const [state, formAction] = useFormState(submitInterest, { ok: false });
+  const [expandedTrip, setExpandedTrip] = useState<string | null>(null);
   return (
     <>
       <section className="hero">
@@ -39,21 +41,59 @@ export default function HomePage() {
       </section>
 
       <section className="grid" aria-label="Sample trips">
-        {TRIPS.map((trip) => (
-          <article
-            className={`card ${TRIP_CLASSES[trip.id] ?? ""}`}
-            key={trip.id}
-          >
-            <div className="card-visual" aria-hidden="true">
-              {TRIP_ICONS[trip.id] ?? "✈️"}
-            </div>
-            <div className="card-body">
-              <h2>{trip.title}</h2>
-              <p className="duration">{trip.duration}</p>
-              <p>{trip.description}</p>
-            </div>
-          </article>
-        ))}
+        {TRIPS.map((trip) => {
+          const expanded = expandedTrip === trip.id;
+          return (
+            <article
+              className={`card ${TRIP_CLASSES[trip.id] ?? ""}`}
+              key={trip.id}
+            >
+              <div className="card-visual" aria-hidden="true">
+                {TRIP_ICONS[trip.id] ?? "✈️"}
+              </div>
+              <div className="card-body">
+                <h2>{trip.title}</h2>
+                <p className="duration">{trip.duration}</p>
+                <p>{trip.description}</p>
+                <p>
+                  <button
+                    aria-expanded={expanded}
+                    className="details-toggle"
+                    onClick={() =>
+                      setExpandedTrip(expanded ? null : trip.id)
+                    }
+                    type="button"
+                  >
+                    {expanded ? "Hide trip details" : "View trip details"}
+                  </button>
+                </p>
+                {expanded && (
+                  <div className="trip-details">
+                    <p className="sample-note">
+                      Sample trip — the itinerary below is illustrative
+                      only. Price on enquiry; no dates or booking terms
+                      are shown here.
+                    </p>
+                    <h3>Sample itinerary</h3>
+                    <ol>
+                      {trip.itinerary.map((day) => (
+                        <li key={day}>{day}</li>
+                      ))}
+                    </ol>
+                    <h3>Who it suits</h3>
+                    <p>{trip.suits}</p>
+                    <h3>What is included (sample)</h3>
+                    <ul>
+                      {trip.includes.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </article>
+          );
+        })}
       </section>
 
       <section className="form-card" aria-label="Register interest">

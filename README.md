@@ -3,7 +3,10 @@
 A small Next.js (App Router) + Supabase app.
 
 - Public page (`/`): three sample trips — Singapore STEM, Jaipur Heritage,
-  London Universities — and a form where a teacher registers interest:
+  London Universities — each with a "View trip details" section showing a
+  sample day-by-day itinerary, who the trip suits, and what is included
+  (labelled as sample only; no prices or dates are shown) — and a form
+  where a teacher registers interest:
   name, school, email, phone, trip, number of students. Submissions are
   saved to Supabase with validation (all fields required, valid email,
   positive whole-number student count, trip must be one of the three).
