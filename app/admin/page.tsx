@@ -139,7 +139,7 @@ export default function AdminPage() {
   return (
     <>
       <h1>Admin — submissions</h1>
-      <p>
+      <p className="admin-bar">
         Signed in as {user.email}. <button onClick={handleLogout}>Sign out</button>
       </p>
       {loadError && (
@@ -149,7 +149,7 @@ export default function AdminPage() {
       )}
 
       <h2>Total students per trip</h2>
-      <ul>
+      <ul className="totals">
         {totals.map((t) => (
           <li key={t.title}>
             {t.title}: {t.students}
@@ -174,6 +174,7 @@ export default function AdminPage() {
         ))}
       </select>
 
+      <div className="table-wrap">
       <table>
         <thead>
           <tr>
@@ -205,6 +206,7 @@ export default function AdminPage() {
           )}
         </tbody>
       </table>
+      </div>
       <p>
         <a href="/">Back to the public page</a>
       </p>
