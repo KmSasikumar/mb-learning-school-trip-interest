@@ -39,7 +39,20 @@ export default function AdminPage() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const nextUser = session?.user ?? null;
+      setUser(nextUser);
+      if (!nextUser) {
+        // Sign-out must leave nothing behind: clear every piece of admin
+        // state, including the login credentials typed at sign-in. The
+        // login inputs are controlled, so any leftover email/password
+        // state would re-fill the login form after sign-out.
+        setRows([]);
+        setEmail("");
+        setPassword("");
+        setFilter("all");
+        setLoadError(null);
+        setLoginError(null);
+      }
     });
     return () => subscription.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,11 +82,24 @@ export default function AdminPage() {
       password,
     });
     if (error) setLoginError(error.message);
+    else {
+      // Do not keep the password in component state for the whole admin
+      // session; the signed-in user is tracked via the Supabase session.
+      setPassword("");
+    }
   }
 
   async function handleLogout() {
     if (supabase) await supabase.auth.signOut();
+    // Clear admin state synchronously, not just via the auth event, so
+    // the login form can never reappear with stale credentials or data.
+    setUser(null);
     setRows([]);
+    setEmail("");
+    setPassword("");
+    setFilter("all");
+    setLoadError(null);
+    setLoginError(null);
   }
 
   if (!supabase) {
@@ -100,7 +126,7 @@ export default function AdminPage() {
             {loginError}
           </p>
         )}
-        <form onSubmit={handleLogin}>
+        <form autoComplete="off" onSubmit={handleLogin}>
           <label htmlFor="admin-email">Email</label>
           <input
             id="admin-email"
